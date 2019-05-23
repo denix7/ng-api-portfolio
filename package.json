@@ -1,0 +1,28 @@
+{
+  "name": "api-portafolio",
+  "version": "1.0.0",
+  "description": "Develop an api rest for a portfolio",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/denix7/ng-api-portfolio.git"
+  },
+  "author": "Dennis Padilla",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/denix7/ng-api-portfolio/issues"
+  },
+  "homepage": "https://github.com/denix7/ng-api-portfolio#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "connect-multiparty": "^2.2.0",
+    "express": "^4.17.0",
+    "mongoose": "^5.5.11"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.0"
+  }
+}
