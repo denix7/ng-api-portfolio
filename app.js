@@ -1,14 +1,15 @@
 'use strict'
 
 var express = require('express');
-//var body-parser = require('body-parser');
+var bodyParser = require('body-parser');
 var app = express();
 
 //Cargar rutas
 
 
 //Cargar middlewares
-
+app.use(bodyParser.urlencoded({extended:false}));
+app.use(bodyParser.json());
 
 //Cargar CORS y Headers
 
