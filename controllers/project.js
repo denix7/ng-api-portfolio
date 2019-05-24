@@ -40,6 +40,25 @@ var controller = {
         })
 
         return res.status(200).send({project, message: 'Metodo saveProject works!'});
+    },
+
+    getProject: function(req, res){
+        var projectId = req.params.id;
+
+        if(projectId == null)
+            return res.status(404).send({message: 'El proyecto no existe'});
+
+        Project.findById(projectId, (err, projectStored) => {
+            if(err){
+                res.status(500).send({message: 'Error en la peticion'});
+            }
+            else if(!projectStored){
+                res.status(404).send({message: 'El proyecto no existe'});
+            }
+            else{
+                res.status(200).send(projectStored);
+            }
+        })
     }
 }
     
