@@ -102,7 +102,26 @@ var controller = {
                 res.status(200).send({updatedProject});
             }
         })
-    }
+    }, 
+
+    deleteProject: function(req, res){
+        var projectId = req.params.id;
+
+        if(!projectId)
+            return res.status(500).send({message: 'Necesita enviar un id de proyecto'});
+
+        Project.findByIdAndDelete(projectId, (err, projectRemoved) => {
+            if(err){
+                res.status(500).send({message: 'Error en la peticion'});
+            }
+            else if(!projectRemoved){
+                res.status(404).send({message: 'El proyecto que desea eliminar no existe'});
+            }
+            else{
+                res.status(200).send({projectRemoved});
+            }
+        })
+    } 
 }
     
     module.exports = controller;
