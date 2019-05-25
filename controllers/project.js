@@ -72,7 +72,7 @@ var controller = {
                 res.status(500).send({message: 'Error en la peticion'});
             }
             else if(!projects){
-                res.status(404).send({message: 'No existen projectos'});
+                res.status(404).send({message: 'No existen proyectos'});
             }
             else{
                 res.status(200).send({
@@ -80,6 +80,26 @@ var controller = {
                     pages: Math.ceil(total/itemsPerPage),
                     projects: projects
                 })
+            }
+        })
+    },
+
+    updatedProject: function(req, res){
+        var projectId = req.params.id;
+        var update = req.body;
+
+        if(!projectId)
+            return res.status(500).send({message: 'Necesita enviar un id de proyecto'});
+
+        Project.findByIdAndUpdate(projectId, update, {new:true}, (err, updatedProject) => {
+            if(err){
+                res.status(500).send({message: 'Error en la peticion'});
+            }
+            else if(!updatedProject){
+                res.status(404).send({message: 'El proyecto que desea actualizar no existe '});
+            }
+            else{
+                res.status(200).send({updatedProject});
             }
         })
     }
