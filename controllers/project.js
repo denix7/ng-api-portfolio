@@ -1,6 +1,7 @@
 'use strict'
 
 var Project = require('../models/project');
+var mongoosePaginate = require('mongoose-pagination');
 
 var controller = {
     home: function(req, res){
@@ -17,7 +18,7 @@ var controller = {
 
     saveProject: function(req, res){
         var project = new Project();
-
+        
         var params = req.body;
         
         project.name = params.name;
@@ -38,8 +39,6 @@ var controller = {
                 res.status(200).send(projectStored);
             }
         })
-
-        return res.status(200).send({project, message: 'Metodo saveProject works!'});
     },
 
     getProject: function(req, res){
@@ -57,6 +56,30 @@ var controller = {
             }
             else{
                 res.status(200).send(projectStored);
+            }
+        })
+    },
+
+    getProjects: function(req, res){
+        var page = 1;
+        var itemsPerPage = 3;
+
+        if(req.params.page)
+            page = req.params.page;
+
+        Project.find().sort('-year').paginate(page, itemsPerPage, (err, projects, total) => {
+            if(err){
+                res.status(500).send({message: 'Error en la peticion'});
+            }
+            else if(!projects){
+                res.status(404).send({message: 'No existen projectos'});
+            }
+            else{
+                res.status(200).send({
+                    total_projects: total,
+                    pages: Math.ceil(total/itemsPerPage),
+                    projects: projects
+                })
             }
         })
     }
