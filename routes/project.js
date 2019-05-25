@@ -11,5 +11,6 @@ router.post('/save-project', ProjectController.saveProject);
 router.get('/get-project/:id?', ProjectController.getProject);
 router.get('/get-project-list/:page?', ProjectController.getProjects);
 router.put('/edit-project/:id?', ProjectController.updatedProject);
+router.delete('/delete-project/:id?', ProjectController.deleteProject);
 
 module.exports = router; 
