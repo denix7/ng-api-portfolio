@@ -2,6 +2,7 @@
 
 var Project = require('../models/project');
 var mongoosePaginate = require('mongoose-pagination');
+var fs = require('fs');
 
 var controller = {
     home: function(req, res){
@@ -128,21 +129,33 @@ var controller = {
         var fileName = 'Imagen no subida';
 
         if(req.files){
+            console.log(req.files)
             var filePath = req.files.imge.path;
             var fileSplit = filePath.split('\\');
             var fileName = fileSplit[1];
 
-            Project.findByIdAndUpdate(projectId, {image: fileName}, (err, projectUpdated) => {
-                if(err){
-                    return res.status(500).send({message: 'La imagen no se ha subido'});
-                }
-                else if(!projectUpdated){
-                    return res.status(404).send({message: 'El proyecto no existe'});
-                }    
-                else{
-                    return res.status(200).send({projectUpdated});
-                }
-            })
+            //extension del archivo
+            var extensionSplit = fileName.split('\.');
+            var fileExtension = extensionSplit[1];
+
+            if(fileExtension == 'png' || fileExtension == 'jpg' || fileExtension == 'jpeg' || fileExtension == 'gif') {
+                Project.findByIdAndUpdate(projectId, {image: fileName}, (err, projectUpdated) => {
+                    if(err){
+                        return res.status(500).send({message: 'La imagen no se ha subido'});
+                    }
+                    else if(!projectUpdated){
+                        return res.status(404).send({message: 'El proyecto no existe'});
+                    }    
+                    else{
+                        return res.status(200).send({projectUpdated});
+                    }
+                })
+            }else{
+                fs.unlink(filePath, (err) => {
+                    return res.status(500).send({message: 'El archivo debe ser una imagen'});
+                }) 
+            }
+
         }else{
             return res.status(200).send({message: fileName})
         }
