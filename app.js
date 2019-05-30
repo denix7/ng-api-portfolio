@@ -25,6 +25,6 @@ app.get('/test', (req, res) => {
     res.status(200).send({message: 'Server it works'});
 });
 
-app.use('/api', project_routes);
+app.use('/api/v1', project_routes);
 
 module.exports = app;

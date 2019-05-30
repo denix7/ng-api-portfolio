@@ -5,19 +5,13 @@ var mongoosePaginate = require('mongoose-pagination');
 var fs = require('fs');
 
 var controller = {
-    home: function(req, res){
+    home: function(req, res) {
         return res.status(200).send({
             message: 'Home its works'
         });
     },
 
-    test: function(req, res){
-        return res.status(200).send({
-            message: 'Method test its works'
-        })
-    },
-
-    saveProject: function(req, res){
+    saveProject: function(req, res) {
         var project = new Project();
         
         var params = req.body;
@@ -30,38 +24,38 @@ var controller = {
         project.image = null;
 
         project.save((err, projectStored) => {
-            if(err){
+            if(err) {
                 res.status(500).send({message: 'Error al guardar los datos'});
             }
-            else if(!projectStored){
+            else if(!projectStored) {
                 res.status(404).send({message: 'No se ha guardado el proyecto'});
             }
-            else{
+            else {
                 res.status(200).send(projectStored);
             }
-        })
+        });
     },
 
-    getProject: function(req, res){
+    getProject: function(req, res) {
         var projectId = req.params.id;
 
         if(projectId == null)
             return res.status(404).send({message: 'El proyecto no existe'});
 
         Project.findById(projectId, (err, projectStored) => {
-            if(err){
+            if(err) {
                 res.status(500).send({message: 'Error en la peticion'});
             }
-            else if(!projectStored){
+            else if(!projectStored) {
                 res.status(404).send({message: 'El proyecto no existe'});
             }
-            else{
+            else {
                 res.status(200).send(projectStored);
             }
-        })
+        });
     },
 
-    getProjects: function(req, res){
+    getProjects: function(req, res) {
         var page = 1;
         var itemsPerPage = 3;
 
@@ -69,23 +63,23 @@ var controller = {
             page = req.params.page;
 
         Project.find().sort('-year').paginate(page, itemsPerPage, (err, projects, total) => {
-            if(err){
+            if(err) {
                 res.status(500).send({message: 'Error en la peticion'});
             }
-            else if(!projects){
+            else if(!projects) {
                 res.status(404).send({message: 'No existen proyectos'});
             }
-            else{
+            else {
                 res.status(200).send({
                     total_projects: total,
                     pages: Math.ceil(total/itemsPerPage),
                     projects: projects
                 })
             }
-        })
+        });
     },
 
-    updatedProject: function(req, res){
+    updatedProject: function(req, res) {
         var projectId = req.params.id;
         var update = req.body;
 
@@ -93,43 +87,42 @@ var controller = {
             return res.status(500).send({message: 'Necesita enviar un id de proyecto'});
 
         Project.findByIdAndUpdate(projectId, update, {new:true}, (err, updatedProject) => {
-            if(err){
+            if(err) {
                 res.status(500).send({message: 'Error en la peticion'});
             }
-            else if(!updatedProject){
+            else if(!updatedProject) {
                 res.status(404).send({message: 'El proyecto que desea actualizar no existe '});
             }
-            else{
+            else {
                 res.status(200).send({updatedProject});
             }
-        })
+        });
     }, 
 
-    deleteProject: function(req, res){
+    deleteProject: function(req, res) {
         var projectId = req.params.id;
 
         if(!projectId)
             return res.status(500).send({message: 'Necesita enviar un id de proyecto'});
 
         Project.findByIdAndDelete(projectId, (err, projectRemoved) => {
-            if(err){
+            if(err) {
                 res.status(500).send({message: 'Error en la peticion'});
             }
-            else if(!projectRemoved){
+            else if(!projectRemoved) {
                 res.status(404).send({message: 'El proyecto que desea eliminar no existe'});
             }
-            else{
+            else {
                 res.status(200).send({projectRemoved});
             }
-        })
+        });
     },
 
-    uploadImage: function(req, res){
+    uploadImage: function(req, res) {
         var projectId = req.params.id;
         var fileName = 'Imagen no subida';
 
-        if(req.files){
-            console.log(req.files)
+        if(req.files) {
             var filePath = req.files.imge.path;
             var fileSplit = filePath.split('\\');
             var fileName = fileSplit[1];
@@ -149,14 +142,14 @@ var controller = {
                     else{
                         return res.status(200).send({projectUpdated});
                     }
-                })
-            }else{
+                });
+            }else {
                 fs.unlink(filePath, (err) => {
                     return res.status(500).send({message: 'El archivo debe ser una imagen'});
                 }) 
             }
 
-        }else{
+        }else {
             return res.status(200).send({message: fileName})
         }
     } 
